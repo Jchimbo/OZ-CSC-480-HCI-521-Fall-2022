@@ -5,6 +5,7 @@ import Query.*;
 import com.mysql.cj.jdbc.Driver;
 import io.github.cdimascio.dotenv.Dotenv;
 
+import javax.sql.DataSource;
 import java.sql.*;
 
 public class Database {
@@ -104,6 +105,23 @@ public class Database {
         DriverManager.registerDriver(driver);
         connection = DriverManager.getConnection(DB_URL, this.username, this.password);
     }
+    public Database(long id, DataSource source) throws SQLException {
+        DB_URL = source.getConnection().getMetaData().getURL();
+        serverID = id;
+        serverName = "DISCORD_" + serverID;
+
+        this.username = source.getConnection().getMetaData().getUserName();
+        this.password = System.getenv("${RESTP}");
+        this.create = new Create(this);
+        this.read = new Read(this);
+        this.update = new Update(this);
+        this.delete = new Delete(this);
+
+        // we are not using enum so set noEnum to true
+        noEnum = true;
+        connection = source.getConnection();
+    }
+
 
     /**
      * Sets the current MySQL user

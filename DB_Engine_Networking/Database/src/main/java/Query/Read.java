@@ -60,7 +60,7 @@ public class Read {
      * @return The author's nickname
      * @throws SQLException an exception that provides information on a database access error or other errors
      */
-    public String nickname(long discord_id) throws SQLException {
+    public  String nickname(long discord_id) throws SQLException {
         PreparedStatement statement = database.connection().prepareStatement(
                 "SELECT *\n" +
                         "\t\t\tFROM authors\n" +
